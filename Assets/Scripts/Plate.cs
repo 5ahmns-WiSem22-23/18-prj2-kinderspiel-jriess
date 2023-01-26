@@ -11,15 +11,47 @@ public class Plate : MonoBehaviour
     public Sprite orangeSprite;
     public Sprite redSprite;
 
-    public enum color
+    Vector3 mousePositionOffset;
+
+    public LayerMask layer;
+
+    Vector3 GetMouseWorldPosition()
     {
-        blue,
-        green,
-        orange,
-        red
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
-    public color plateColor;
+    private void Update()
+    {
+        CheckIfPutDown();
+    }
+
+    private void OnMouseDown()
+    {
+        mousePositionOffset = gameObject.transform.position - GetMouseWorldPosition();
+    }
+
+    private void OnMouseDrag()
+    {
+        transform.position = GetMouseWorldPosition() + mousePositionOffset;
+    }
+
+    void CheckIfPutDown()
+    {
+        Collider2D col = Physics2D.OverlapCircle(transform.position, 0.5f, layer);
+        if(col != null)
+        {
+            Debug.Log(col.gameObject.GetComponent<Tile>().tileColor);
+            Debug.Log(plateColor);
+            if(col.gameObject.GetComponent<Tile>().tileColor == plateColor && !col.gameObject.GetComponent<Tile>().tileOccupied)
+            {
+                Debug.Log("dodododo");
+                col.gameObject.GetComponent<Tile>().SetToOccupied();
+                Destroy(gameObject);
+            }
+        }       
+    }
+
+    public Tile.color plateColor;
 
     private void Start()
     {
@@ -29,21 +61,26 @@ public class Plate : MonoBehaviour
 
     void SetColor()
     {
-        if(plateColor == color.blue)
+        if(plateColor == Tile.color.blue)
         {
             srPlate.sprite = blueSprite;
         }
-        else if(plateColor == color.green)
+        else if(plateColor == Tile.color.green)
         {
             srPlate.sprite = greenSprite;
         }
-        else if (plateColor == color.orange)
+        else if (plateColor == Tile.color.orange)
         {
             srPlate.sprite = orangeSprite;
         }
-        else if(plateColor == color.orange)
+        else if(plateColor == Tile.color.red)
         {
             srPlate.sprite = redSprite;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
 }

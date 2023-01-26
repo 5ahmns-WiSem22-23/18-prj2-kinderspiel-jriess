@@ -33,8 +33,11 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnPlate()
     {
-        GameObject plateToSpawn = plates[Random.Range(0, plates.Count)];
-        plates.Remove(plateToSpawn);
-        plateToSpawn.transform.position = new Vector2(0, 0);
+        if(plates.Count > 0)
+        {
+            GameObject plateToSpawn = plates[Random.Range(0, plates.Count)];
+            plates.Remove(plateToSpawn);
+            plateToSpawn.transform.position = new Vector2(0, 0);
+        }       
     }
 }

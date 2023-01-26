@@ -52,6 +52,6 @@ public class Tile : MonoBehaviour
     public void SetToOccupied()
     {
         tileOccupied = true;
-        GameObject.FindObjectOfType<SpawnManager>().readyToSpawn = true;
+        FindObjectOfType<SpawnManager>().readyToSpawn = true;
     } 
 }
